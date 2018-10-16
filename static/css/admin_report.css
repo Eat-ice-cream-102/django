@@ -1,0 +1,94 @@
+.nav-tabs > li > a {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #761c19;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #bbffff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.nav > li > a:focus, .nav > li > a:hover {
+    color: #0000c6;
+    background-color: rgba(193, 255, 228, 0.5);
+}
+
+h1 {
+    text-align: center;
+    color: #005757;
+}
+
+.previous-page {
+    position: absolute;
+    right: 5%;
+}
+
+@media screen and (max-width: 600px) {
+    .table_outside {
+        width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .tab-content {
+        /*width: 100%;*/
+        float: initial;
+        margin: auto;
+
+    }
+}
+
+form {
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.sales-table {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    table-layout: fixed;
+}
+
+tr > th {
+    font-size: 18px;
+}
+
+tr > td {
+    font-size: 16px;
+    padding:8px;
+    text-align: center;
+}
+
+th {
+    text-align: center;
+    color: #009393;
+}
+
+table {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+label {
+    color: #0000c6;
+    font-size: 18px;
+}
+
+ol, ul {
+    margin-top: 15px;
+}
+
+@media (min-width: 992px) {
+    .col-md-4 {
+        width: 50%;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-offset-4 {
+        margin-left: 25%;
+    }
+}

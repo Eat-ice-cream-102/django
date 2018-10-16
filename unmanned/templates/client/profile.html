@@ -1,0 +1,207 @@
+{% extends 'client/base.html' %}
+{% load staticfiles %}
+{% load client_extras %}
+{% block title %}個人資料{% endblock %}
+{% block css %}
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("a").click(function () {
+                $('#' + $(this).attr('target')).toggleClass('hidden');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#personal" data-toggle="tab">
+                    個人資料
+                </a>
+            </li>
+            <li><a href="#record" data-toggle="tab">購買記錄</a></li>
+
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="personal">
+                {% if request.session.is_login %}
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+
+                                    <div class="box box-info">
+
+                                        <div class="box-body">
+                                            <div class="col-sm-6">
+                                                <div align="center">
+                                                    <img alt="User Pic"
+                                                         src="{{ request.session.user_img }}"
+                                                         id="profile-image1" class="img-circle img-responsive">
+                                                </div>
+                                                <br>
+
+                                            </div>
+                                            {% for user_profile in user_profile %}
+                                                {% if not user_profile.has_photo %}
+                                                    <div class="col-sm-6">
+                                                        <form method="get" action="take_pic/">
+                                                            想入店？讓我們來
+                                                            <button type="submit">拍照</button>
+                                                            吧~(✿◡‿◡)
+                                                        </form>
+                                                    </div>
+                                                {% elif user_profile.line_account is None %}
+                                                    <div class="col-sm-6">
+                                                        <h4>最後將我們加為Line好友吧~</h4>
+                                                        <img src="{% static 'icon/line_QRcode.png' %}" height="100" width="100">
+                                                    </div>
+                                                {% else %}    
+                                                    <div class="col-sm-6">
+                                                        <form method="get" action="take_pic/">
+                                                            您已被識別，還想再
+                                                            <button type="submit">拍一次</button>
+                                                            嗎(*^▽^*)？
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="clearfix"></div>
+                                            <hr style="margin:5px 0 5px 0;">
+
+                                            {% for user_profile in user_profile %}
+                                                <div class="col-sm-5 col-xs-6 tital ">姓名：</div>
+                                                <div class="col-sm-7"> {{ user_profile.member_name }}</div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="bot-border"></div>
+
+                                                <div class="col-sm-5 col-xs-6 tital ">性別：</div>
+                                                <div class="col-sm-7">{{ user_profile.get_gender_display }}</div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="bot-border"></div>
+
+                                                <div class="col-sm-5 col-xs-6 tital ">電話：</div>
+                                                <div class="col-sm-7">{{ user_profile.phone_number }}</div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="bot-border"></div>
+
+                                                <div class="col-sm-5 col-xs-6 tital ">生日：</div>
+                                                <div class="col-sm-7">{{ user_profile.birthdate|date:'Y-m-d' }}</div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="bot-border"></div>
+
+                                                <div class="col-sm-5 col-xs-6 tital ">E-Mail：</div>
+                                                <div class="col-sm-7">{{ user_profile.e_mail }}</div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="bot-border"></div>
+
+                                            {% endfor %}
+                                            <!-- /.box-body -->
+                                        </div>
+                                        <!-- /.box -->
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="tab-pane fade" id="record" style="overflow-x:auto;">
+                {% if request.session.is_login %}
+
+                    <table class="table_outside" border="1" width="60%">
+                        <tr>
+                            <td>
+                                <table border="1" width="100%">
+                                    <tr style="background-color: #556688; color: #bce8f1">
+                                        <td width="25%">訂單編號</td>
+                                        <td width="25%">日期</td>
+                                        <td width="25%">消費金額</td>
+                                        <td width="25%">詳細資料</td>
+                                    </tr>
+                                </table>
+
+                                <table border="1" width="100%">
+                                    {% for record in records %}
+                                        {% if record.purchase_set.count == 0 %}
+                                        {% else %}
+					<tr>
+                                            <td width="25%">{{ record.come_time|time_tran }}</td>
+					    <td width="25%">{{ record.come_time|date:'Y-m-d' }}</td>
+					    <td width="25%">{{ record.come_time|date:'Y-m-d H:i'|all_price }}</td>
+				   	    <td width="25%"><a target={{ record.come_time|time_tran }}>查看/隱藏</a></td>
+					</tr>
+                                        <tr>
+                                            <td colspan="4" style="padding:10px;">
+                                                <table class="hidden table_inside"
+                                                       id={{ record.come_time|time_tran }}  border="0" width="100%">
+
+                                                    <tr style="color: #01814a">
+                                                        <td width="25%">品項名稱</td>
+                                                        <td width="25%">單價</td>
+                                                        <td width="25%">數量</td>
+                                                        <td width="25%">總價</td>
+                                                    </tr>
+
+                                                    {% for product in record.purchase_set.all %}
+                                                        <tr>
+                                                            <td width="20%">{{ product.product }}</td>
+                                                            <td width="20%">{{ product.product.price }}</td>
+                                                            <td width="20%">{{ product.quantity }}</td>
+                                                            <td width="20%">{% widthratio product.quantity 1 product.product.price %}</td>
+
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            </td>
+                                        </tr>
+					{% endif %}
+                                    {% empty %}
+                                        {% for user_profile in user_profile %}
+                                            {% if not user_profile.has_photo %}
+                                                <div class="col-sm-6">
+                                                    <form method="get" action="take_pic/">
+                                                        想入店？讓我們來
+                                                        <button type="submit">拍照</button>
+                                                        吧~(✿◡‿◡)
+                                                    </form>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-sm-6">
+                                                    <form>
+                                                        您還沒有消費記錄喲~
+                                                    </form>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </table>
+                            </td>
+                        </tr>
+
+
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+        {#        <form method="get" action="record/">#}
+        {#            <button type="submit">購買記錄</button>#}
+        {#        </form>#}
+
+    </div>
+{% endblock %}

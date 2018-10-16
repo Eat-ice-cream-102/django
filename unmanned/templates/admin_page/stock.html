@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Stock</title>
+
+    </head>
+    <body>
+        <p>庫存報表</p>
+        <table style="border-top:3px #FFD382 solid;border-bottom:3px #82FFFF solid;" cellpadding="10" border='0'>
+            <tr>
+                <th>產品種類</th>
+                <th>產品名稱</th>
+                <th>價格</th>
+                <th>庫存數量</th>
+            </tr>
+            {% for produce in produce %}
+            <tr>
+                <td>{{produce.category_no.category_name}}</td>
+                <td>{{produce.product_name}}</td>
+                <td>{{produce.price}}</td>
+                <td>{{produce.stock}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+</html>

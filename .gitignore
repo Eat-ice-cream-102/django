@@ -1,0 +1,5 @@
+unmanned_Django/settings.py
+unmanned_Django/__pycache__/
+.idea
+dataset/
+media/profile_image/

@@ -1,0 +1,36 @@
+{% extends 'admin_page/base.html' %}
+{% load staticfiles %}
+{% load client_extras %}
+{% block title %}Member_Analysis{% endblock %}
+{% block css %}
+    <link href="{% static 'css/admin_report.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>會員分析</h1>
+        <table style="width: -webkit-fill-available;border-top:3px #FFD382 solid;border-bottom:3px #82FFFF solid;"
+               cellpadding="10" border='0'>
+            <tr>
+                <th>會員編號</th>
+                <th>會員名稱</th>
+                <th>累積消費金額</th>
+                <th>來店次數</th>
+                <th>平均消費金額</th>
+            </tr>
+            {% for member in member %}
+                <tr>
+                    <td>{{ member.phone_number }}</td>
+                    <td>{{ member.member_name }}</td>
+                    <td>{{ member.total }}</td>
+                    <td>{{ member.times }}</td>
+                    <td>{{ member.times|avg_price:member.total }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+        <form style="background-color: transparent;" class="previous-page">
+            <input type="button" value="上一頁" onclick="history.back()">
+        </form>
+    </div>
+
+{% endblock %}

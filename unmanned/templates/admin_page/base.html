@@ -1,0 +1,137 @@
+{% load staticfiles %}
+{% load client_extras %}
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- meta下 -->
+    <title>{% block title %}base{% endblock %}</title>
+    <link rel="Shortcut Icon" type="image/x-icon" href="{% static 'icon/icon.png' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet"/>
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='https://us-west-2b.online.tableau.com/javascripts/api/viz_v1.js'></script>
+    {% block scripts %}{% endblock %}
+    {% block css %}{% endblock %}
+
+</head>
+<body>
+{% block content %}{% endblock %}
+<script type="text/javascript">
+    //sales
+    var today = new Date();
+    document.getElementById('dateControl').valueAsDate = today;//默認今天日期
+    document.getElementById('sec_dateControl').valueAsDate = today;//默認今天日期
+    //sales
+    //日期判斷
+    function calendar() {
+        var first = document.getElementById("dateControl").value;
+        var sec = document.getElementById("sec_dateControl").value;
+        first = new Date(first);
+        sec = new Date(sec);
+        var today = new Date();
+        if (first.getTime() > sec.getTime()) {
+            alert("開始時間不能大於結束時間！！");
+        }
+        if ((first.getTime() > today.getTime()) || (sec.getTime() > today.getTime())) {
+            alert("日期不能超過今天！！！")
+        }
+    }
+
+    // check box 判斷
+    function order() {
+        is_check = document.getElementById("orderbytime").checked
+        is_check_money = document.getElementById("orderbymoney").checked
+        if (is_check == true) {
+            document.getElementById("orderbymoney").disabled = true;
+            is_check_money = true;
+        } else if (is_check == false && is_check_money == false) {
+            document.getElementById("orderbytime").disabled = false;
+            document.getElementById("orderbymoney").disabled = false;
+        } else {
+            document.getElementById("orderbytime").disabled = true;
+            is_check_money = true;
+        }
+    }
+
+    //stock
+    // check box 判斷
+    function order_stock() {
+        is_check = document.getElementById("orderbytime_stock").checked
+        is_check_money = document.getElementById("orderbymoney_stock").checked
+        if (is_check == true) {
+            document.getElementById("orderbymoney_stock").disabled = true;
+            is_check_money = true;
+        } else if (is_check == false && is_check_money == false) {
+            document.getElementById("orderbytime_stock").disabled = false;
+            document.getElementById("orderbymoney_stock").disabled = false;
+        } else {
+            document.getElementById("orderbytime_stock").disabled = true;
+            is_check_money = true;
+        }
+    }
+
+    //member
+    document.getElementById('dateControl_member').valueAsDate = new Date();//默認今天日期
+    document.getElementById('sec_dateControl_member').valueAsDate = new Date();//默認今天日期
+    //日期判斷
+    function calendar_member() {
+        var first = document.getElementById("dateControl").value;
+        var sec = document.getElementById("sec_dateControl").value;
+        first = new Date(first);
+        sec = new Date(sec);
+        today = new Date();
+        if (first.getTime() > sec.getTime()) {
+            alert("開始時間不能大於結束時間！！");
+        }
+        if ((first.getTime() > today.getTime()) || (sec.getTime() > today.getTime())) {
+            alert("日期不能超過今天！！！")
+        }
+    }
+
+    // check box 判斷
+    function order_member() {
+        is_check = document.getElementById("orderbytime_member").checked
+        is_check_money = document.getElementById("orderbymoney_member").checked
+        if (is_check == true) {
+            document.getElementById("orderbymoney_member").disabled = true;
+            is_check_money = true;
+        } else if (is_check == false && is_check_money == false) {
+            document.getElementById("orderbytime_member").disabled = false;
+            document.getElementById("orderbymoney_member").disabled = false;
+        } else {
+            document.getElementById("orderbytime_member").disabled = true;
+            is_check_money = true;
+        }
+    }
+
+    // member analysis
+    // 勾選不限 只讀
+    function time_money() {
+        times = document.getElementById("select_times").value;
+        money = document.getElementById("select_money").value;
+        if (times == 0) {
+            document.getElementById("times").disabled = true;
+            document.getElementById("times").value = 0;
+        } else {
+            document.getElementById("times").disabled = false;
+        }
+        if (money == 0) {
+            document.getElementById("how_much_money").disabled = true;
+            document.getElementById("how_much_money").value = 0;
+        } else {
+            document.getElementById("how_much_money").disabled = false;
+        }
+    }
+
+
+</script>
+</body>
+</html>

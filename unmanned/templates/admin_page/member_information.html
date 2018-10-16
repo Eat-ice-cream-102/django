@@ -1,0 +1,37 @@
+{% extends 'admin_page/base.html' %}
+{% load staticfiles %}
+{% load client_extras %}
+{% block title %}Member_Information{% endblock %}
+{% block css %}
+    <link href="{% static 'css/admin_report.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>會員資料</h1>
+        <table class="sales-table"
+               style="width: -webkit-fill-available;border-top:3px #FFD382 solid;border-bottom:3px #82FFFF solid;"
+               cellpadding="10" border='0'>
+            <tr>
+                <th>會員名稱</th>
+                <th>訂單編號</th>
+                <th>購買產品</th>
+                <th>產品價格</th>
+                <th>購買數量</th>
+                <th>消費總金額</th>
+            </tr>
+            {% for purchase in purchase %}
+                <tr>
+                    <td>{{ purchase.come_time.phone_number }}</td>
+                    <td>{{ purchase.come_time.come_time|time_tran }}</td>
+                    <td>{{ purchase.product.product_name }}</td>
+                    <td>{{ purchase.product.price }}</td>
+                    <td>{{ purchase.quantity }}</td>
+                    <td>{{ purchase.quantity|order_detail_total:purchase.product.price }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form style="background-color: transparent;" class="previous-page">
+            <input type="button" value="上一頁" onclick="history.back()">
+        </form>
+    </div>
+{% endblock %}

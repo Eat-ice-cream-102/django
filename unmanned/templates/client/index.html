@@ -1,0 +1,116 @@
+{% load staticfiles %}
+{% load cache %}
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>unmanned-store</title>
+    <!-- icon -->
+    <link rel="Shortcut Icon" type="image/x-icon" href="/static/icon/icon.png">
+    <!-- Bootstrap -->
+    <link href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <link href="/static/css/index.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ruge+Boogie" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gamja+Flower&effect=fire-animation" rel="stylesheet" type="text/css">
+
+</head>
+<body background="{% static 'icon/home_page.jpg' %}">
+{% block content %}
+    {% if request.session.is_login %}
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#my-nav"
+                            aria-expanded="false">
+                        <span class="sr-only">切換導航條</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/index/">Unmanned-Store</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="my-nav">
+                    <!--<ul class="nav navbar-nav">
+                      <li class="active"><a href="/index/">首頁</a></li>
+                    </ul>-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/profile/"><img class="" src="{{ request.session.user_img }}" height="25"
+                                                     width="28"
+                                                     style="border-radius: 50%">個人資料</a></li>
+                        <li><a href="/logout/">登出</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div>
+            <h1 class="font-effect-fire-animation">HOT SALE</h1>
+        </div>
+		
+		{% cache 500 hot-item %}
+        <div class="section">
+            <div class="coverflow">
+                {% for product in hot_product %}
+                        <a href="https://www.amazon.com/{{ product.product__product_url }}"><img
+                            src="{{ product.product__picture_url }}" class="resize"></a>
+                {% endfor %}
+            </div>
+        </div>
+		{% endcache %}
+
+
+    {% else %}
+        <section>
+            <div class="text-center">
+                <h1 class="web-title" style="text-align: center; letter-spacing: 15px;">UNMANNED
+                    STORE<span></span></h1>
+            </div>
+        </section>
+        <div class="button">
+            <div class="button-left">
+                <a href="/login/" class="btn-two cyan rounded">Login</a>
+            </div>
+            <div class="button-right">
+                <a href="/register/" class="btn-two cyan rounded">Register</a>
+            </div>
+
+
+        </div>
+    {% endif %}
+{% endblock %}
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('img.captcha').click(function () {
+            var $form = $(this).parents('form');
+            var url = location.protocol + "//" + window.location.hostname + ":" + location.port + "/captcha/refresh/";
+            $.getJSON(url, {}, function (json) {
+                $form.find('input[name="captcha_0"]').val(json.key);
+                $form.find('img.captcha').attr('src', json.image_url);
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

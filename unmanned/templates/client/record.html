@@ -1,0 +1,80 @@
+{% extends 'client/base.html' %}
+{% load staticfiles %}
+{% load client_extras %}
+{% block title %}交易記錄{% endblock %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("a").click(function(){
+                $('#' + $(this).attr('target')).toggleClass('hidden');
+            });
+        });
+    </script>
+{% endblock %}
+{% block css %}<link href="{% static 'css/record.css' %}" rel="stylesheet"/>{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        {% if request.session.is_login %}
+            <table border="1" width="60%">
+            <tr>
+                <td valign="top">
+                    <table border="1" width="100%">
+                        <tr>
+                            <td width="33%">訂單編號</td>
+                            <td width="33%">日期</td>
+                            <td width="33%">詳細資料</td>
+                        </tr>
+                    </table>
+
+                    <table border="1" width="100%">
+                    {% for record in records %}
+                        <tr>
+                            <td width="33%">{{ record.order_id }}</td>
+                            <td width="33%">{{ record.order_date|date:'Y-m-d'}}</td>
+                            <td width="33%"><a  target={{ record.order_id }}>查看/隱藏</a></td>
+                        </tr>
+                        <tr >
+                        <td colspan="3" height="120%" style="padding:10px;">
+                            <table id={{ record.order_id }} class="hidden" align="center" border="0" width="80%">
+
+                                <tr>
+                                    <td>品項名稱</td>
+                                    <td>數量</td>
+                                    <td>折扣</td>
+                                    <td>總價</td>
+                                </tr>
+
+                                {% for product in record.orderdetail_set.all %}
+                                <tr>
+                                    <td>{{ product.produce }}</td>
+                                    <td>{{ product.quantity }}</td>
+                                {% if product.discount == None %}
+                                    <td>無</td>
+                                {% else %}
+                                    <td>{{ product.discount }}</td>
+                                {% endif %}
+                                {% widthratio product.quantity 1 product.produce.price as total_tmp %}
+                                    {% if product.discount == None %}
+                                        <td>{{ total_tmp }}</td>
+                                    {% else %}
+                                        <td>{{ total_tmp|mul:product.discount }}</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </td>
+            </tr>
+
+
+            </table>
+        {% endif %}
+
+    </div>
+{% endblock %}

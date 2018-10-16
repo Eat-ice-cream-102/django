@@ -1,0 +1,201 @@
+{% extends 'admin_page/base.html' %}
+{% load staticfiles %}
+{% block title %}admin_report{% endblock %}
+{% block css %}
+    <link href="{% static 'css/admin_report.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <div>
+        <!-- tab 標籤-->
+        <ul class="nav nav-tabs">
+
+            <li class="active">
+                <a href="#sales" data-toggle="tab">
+                    銷售明細
+                </a>
+            </li>
+            <li><a href="#stock" data-toggle="tab">庫存明細</a></li>
+            <li><a href="#product" data-toggle="tab">產品銷售排行榜</a></li>
+            <li><a href="#member" data-toggle="tab">會員消費明細</a></li>
+            <li><a href="#member_an" data-toggle="tab">會員分析</a></li>
+        </ul>
+        <!-- 採購明細-->
+        <div id="myTabContent" class="tab-content" style="line-height: 28px; font-size: 16px">
+
+            <div class="tab-pane fade in active" id="sales">
+
+                <div class="col-md-4 col-md-offset-4">
+                    <form method="get" action="/sales/">
+                        <label for="dateControl">選擇起始日期：</label>
+                        <input type="date" name="datetime" id="dateControl" onchange="calendar()"><br>
+                        <label for="sec_dateControl">選擇結束日期：</label>
+                        <input type="date" name="endtime" id="sec_dateControl"
+                               onchange="calendar()"><br>
+                        <label for="category">選擇商品類別：</label>
+                        <select name="get_category" style="width:150px" class="category"
+                                id="category">
+                            <option value=0>全選</option>
+                            {% for category in category %}
+                                　
+                                <option value={{ category.category_no }}>{{ category.category_name }}</option>
+                            {% endfor %}
+                        </select><br>
+
+                        <input type="checkbox" name="time" id="orderbytime" onchange="order()"
+                               onclick="order()"
+                               checked>依照時間排序<br>
+                        <input type="checkbox" name="money" id="orderbymoney" onchange="order()"
+                               onclick="order()"
+                               disabled>依照價格排序<br>
+                        {% csrf_token %}
+                        <button type="submit" name="detail_sales" value="">搜尋</button>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- 庫存明細-->
+            <div class="tab-pane fade" id="stock">
+                {#                <div class="col-md-4 col-md-offset-4">#}
+                {#                    <form method="get" action="/admin_page/stock">#}
+                {#                        <label for="category_stock"> 選擇商品類別：</label>#}
+                {#                        <select name="get_category" style="width:150px" class="category"#}
+                {#                                id="category_stock">#}
+                {#                            <option value=0>全選</option>#}
+                {#                            {% for category in category %}#}
+                {#                                　#}
+                {#                                <option value={{ category.category_no }}>{{ category.category_name }}</option>#}
+                {#                            {% endfor %}#}
+                {#                        </select><br>#}
+                {##}
+                {#                        <input type="checkbox" name="time" id="orderbytime_stock"#}
+                {#                               onchange="order_stock()"#}
+                {#                               onclick="order_stock()"#}
+                {#                               checked>依照數量排序<br>#}
+                {#                        <input type="checkbox" name="money" id="orderbymoney_stock"#}
+                {#                               onchange="order_stock()"#}
+                {#                               onclick="order_stock()"#}
+                {#                               disabled>依照價格排序<br>#}
+                {#                        {% csrf_token %}#}
+                {#                        <button button type="submit">搜尋</button>#}
+                {#                    </form>#}
+                {##}
+                {#                </div>#}
+                <!--庫存 tableau-->
+                <script type='text/javascript'
+                        src='https://us-west-2b.online.tableau.com/javascripts/api/viz_v1.js'></script>
+                <div class='tableauPlaceholder' style='width: 1100px; height: 827px;'>
+                    <object class='tableauViz' width='1100' height='827' style='display:none;'>
+                        <param name='host_url' value='https%3A%2F%2Fus-west-2b.online.tableau.com%2F'/>
+                        <param name='embed_code_version' value='3'/>
+                        <param name='site_root' value='&#47;t&#47;cb022'/>
+                        <param name='name' value='1&#47;sheet0'/>
+                        <param name='tabs' value='no'/>
+                        <param name='toolbar' value='yes'/>
+                        <param name='showAppBanner' value='false'/>
+                        <param name='filter' value='iframeSizedToWindow=true'/>
+                    </object>
+                </div>
+            </div>
+            <!-- 銷售排行-->
+            <div class="tab-pane fade" id="product">
+                <table class="sales-table" style="border-top:3px #FFD382 solid;
+                    border-bottom:3px #82FFFF solid; width: 60%;"
+                       cellpadding="10" border='0'>
+                    <tr>
+                        <th width="25%">產品名稱</th>
+                        <th width="25%">購買次數</th>
+                        <th width="25%">購買數量</th>
+                        <th width="25%">銷售額</th>
+                    </tr>
+                    {% for purchase in purchase %}
+                        <tr style="font-size: 16px;">
+                            <td width="25%">{{ purchase.product_name }}</td>
+                            <td width="25%">{{ purchase.times }}</td>
+                            <td width="25%">{{ purchase.qty }}</td>
+                            <td width="25%">{{ purchase.total }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+            <!-- 會員資料-->
+            <div class="tab-pane fade" id="member">
+                <div class="col-md-4 col-md-offset-4">
+                    <form method="get" action="/admin_page/member_information">
+                        <label for="dateControl_member"> 選擇起始日期:</label>
+                        <input type="date" name="datetime" id="dateControl_member" onchange="calendar_member()">
+                        <br>
+                        <label for="sec_dateControl_member"> 選擇結束日期:</label>
+                        <input type="date" name="endtime" id="sec_dateControl_member" onchange="calendar_member()"><br>
+                        <label for="select_member">選擇會員：</label>
+                        <select name="get_member" style="width:150px" class="member" id="select_member">
+                            <option value=0>全選</option>
+                            {% for member in member %}
+                                　
+                                <option value={{ member.phone_number }}>{{ member.phone_number }} {{ member.member_name }}</option>
+                            {% endfor %}
+                        </select><br>
+
+                        <label for="category_member"> 選擇商品類別：</label>
+                        <select name="get_category" style="width:150px" class="category" id="category_member">
+                            <option value=0>全選</option>
+                            {% for category in category %}
+                                　
+                                <option value={{ category.category_no }}>{{ category.category_name }}</option>
+                            {% endfor %}
+                        </select><br>
+
+                        <input type="checkbox" name="time" id="orderbytime_member" onchange="order_member()"
+                               onclick="order_member()" checked>依消費日期排序<br>
+                        <input type="checkbox" name="money" id="orderbymoney_member" onchange="order_member()"
+                               onclick="order_member()" disabled>依照消費金額排序<br>
+                        {% csrf_token %}
+                        <button button type="submit">搜尋</button>
+                    </form>
+                </div>
+            </div>
+            <!-- 會員分析-->
+            <div class="tab-pane fade" id="member_an">
+                <div class="col-md-4 col-md-offset-4">
+                    <form method="get" action="/admin_page/member_analysis">
+
+                        <label for="select_member">選擇會員：</label>
+                        <select name="get_member" style="width:150px" class="member" id="select_member_an">
+                            <option value=0>全選</option>
+                            {% for member in member %}
+                                　
+                                <option value={{ member.phone_number }}>{{ member.phone_number }} {{ member.member_name }}</option>
+                            {% endfor %}
+                        </select><br>
+                        <label for="how_much_money">累積消費金額:</label>
+                        <select name="select_money" id="select_money" onchange="time_money()">
+                            <option value=1>等於</option>
+                            <option value=2>小於</option>
+                            <option value=3>大於</option>
+                            <option value=0>不限</option>
+                        </select>
+                        <input id="how_much_money" type="text" name="how_much_money" value="1000" style="width:50px"
+                               onkeyup="value=value.replace(/[^\d]/g,'') "
+                               onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
+                        <label for="times">累積消費次數:</label>
+                        <select name="select_times" id="select_times" onchange="time_money()">
+                            <option value=1>等於</option>
+                            <option value=2>小於</option>
+                            <option value=3>大於</option>
+                            <option value=0>不限</option>
+                        </select>
+                        <input id="times" type="text" name="times" value="1" style="width:50px"
+                               onkeyup="value=value.replace(/[^\d]/g,'') "
+                               onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/><br>
+                        {% csrf_token %}
+                        <button button type="submit">搜尋</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

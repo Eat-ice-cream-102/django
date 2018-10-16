@@ -1,0 +1,42 @@
+/*.navbar {*/
+  /*background-color: #77DDFF;*/
+/*}*/
+/*.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {*/
+  /*background-color: #77DDFF;*/
+/*}*/
+.navbar-brand {
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  }
+.navbar-default {
+    opacity: 0.6;
+}
+.navbar-default .navbar-brand {
+    color: dodgerblue;
+}
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+    color: dodgerblue;
+    background-color: transparent;
+    opacity: 0.6;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    color: steelblue;
+    background-color: transparent;
+}
+.navbar-default .navbar-nav>li>a {
+    color: #777;
+}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    color: #d94600;
+    background-color: transparent;
+}
+.navbar-default .navbar-nav>li>a{
+    font-size: 16px;
+}
+
+body {
+    background-image: url("/static/icon/home_page.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    /*background:rgba(0,0,0,0.6);*/
+}
